@@ -1,0 +1,13 @@
+# Flatpak
+build-dir/
+
+# Editor / OS
+*.swp
+*.swo
+.DS_Store
+
+# Shell
+*.log
+
+# Bats
+.bats-runner.log

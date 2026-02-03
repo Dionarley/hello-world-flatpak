@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 
-@test "hello-world exits cleanly" {
-    run ./app/bin/hello-world <<< ""
+@test "hello-world headless print works" {
+    run ./app/bin/hello-world --print
     [ "$status" -eq 0 ]
 }

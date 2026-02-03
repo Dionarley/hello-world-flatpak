@@ -3,48 +3,133 @@
 set -Eeuo pipefail
 IFS=$'\n\t'
 
+readonly APP_ID="com.example.HelloWorld"
 readonly TITLE="Hello World TUI"
-readonly MESSAGE="Hello World"
+readonly CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.var/app/${APP_ID}/config}"
+readonly CONFIG_FILE="${CONFIG_DIR}/settings.conf"
+
+# ------------------------
+# Utils
+# ------------------------
 
 has_dialog() {
     command -v dialog >/dev/null 2>&1
 }
 
-tui_dialog() {
-    dialog \
-        --clear \
-        --title "${TITLE}" \
-        --msgbox "${MESSAGE}" 7 40
+ensure_config() {
+    mkdir -p "${CONFIG_DIR}"
+    if [[ ! -f "${CONFIG_FILE}" ]]; then
+        cat > "${CONFIG_FILE}" <<EOF
+USERNAME=guest
+THEME=default
+EOF
+    fi
 }
 
-tui_ncurses() {
-    tput clear
-    tput civis
-
-    local rows cols
-    rows=$(tput lines)
-    cols=$(tput cols)
-
-    local r=$((rows / 2))
-    local c=$(((cols - ${#MESSAGE}) / 2))
-
-    tput cup "${r}" "${c}"
-    printf '%s' "${MESSAGE}"
-
-    tput cup $((r + 2)) $(((cols - 24) / 2))
-    printf '[ Pressione ENTER ]'
-
-    read -r _
-    tput cnorm
-    tput clear
+load_config() {
+    # shellcheck disable=SC1090
+    source "${CONFIG_FILE}"
 }
+
+save_config() {
+    cat > "${CONFIG_FILE}" <<EOF
+USERNAME=${USERNAME}
+THEME=${THEME}
+EOF
+}
+
+# ------------------------
+# Actions
+# ------------------------
+
+action_show_message() {
+    local msg="Hello World, ${USERNAME}!"
+
+    if has_dialog; then
+        dialog --title "${TITLE}" --msgbox "${msg}" 7 50
+    else
+        printf '%s\n' "${msg}"
+        read -r -p "Pressione ENTER para continuar"
+    fi
+}
+
+action_configure() {
+    if has_dialog; then
+        USERNAME=$(dialog --stdout --inputbox "Username:" 8 40 "${USERNAME}")
+        THEME=$(dialog --stdout --inputbox "Theme:" 8 40 "${THEME}")
+    else
+        read -r -p "Username [${USERNAME}]: " tmp && USERNAME=${tmp:-$USERNAME}
+        read -r -p "Theme [${THEME}]: " tmp && THEME=${tmp:-$THEME}
+    fi
+
+    save_config
+}
+
+action_about() {
+    local text="Hello World TUI\nBash + Flatpak\nConfig em XDG\nModo headless disponível"
+
+    if has_dialog; then
+        dialog --title "About" --msgbox "${text}" 8 50
+    else
+        printf '%s\n' "${text}"
+        read -r -p "ENTER para voltar"
+    fi
+}
+
+# ------------------------
+# Menu
+# ------------------------
+
+menu_loop() {
+    while true; do
+        local choice
+
+        if has_dialog; then
+            choice=$(dialog --stdout --title "${TITLE}" --menu "Escolha uma opção:" 12 50 4 \
+                1 "Mostrar mensagem" \
+                2 "Configurações" \
+                3 "Sobre" \
+                4 "Sair")
+        else
+            printf '\n1) Mostrar mensagem\n2) Configurações\n3) Sobre\n4) Sair\n'
+            read -r -p "Escolha: " choice
+        fi
+
+        case "${choice}" in
+            1) action_show_message ;;
+            2) action_configure ;;
+            3) action_about ;;
+            4|"" ) break ;;
+        esac
+    done
+}
+
+# ------------------------
+# Headless mode
+# ------------------------
+
+handle_cli() {
+    case "${1:-}" in
+        --print)
+            printf 'Hello World, %s!\n' "${USERNAME}"
+            exit 0
+            ;;
+        --config-show)
+            cat "${CONFIG_FILE}"
+            exit 0
+            ;;
+    esac
+}
+
+# ------------------------
+# Main
+# ------------------------
 
 main() {
-    if has_dialog; then
-        tui_dialog
-    else
-        tui_ncurses
-    fi
+    ensure_config
+    load_config
+    handle_cli "$@"
+    menu_loop
 }
 
 main "$@"
