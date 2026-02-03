@@ -1,0 +1,30 @@
+app-id: com.example.HelloWorld
+
+runtime: org.freedesktop.Platform
+runtime-version: "23.08"
+sdk: org.freedesktop.Sdk
+
+command: hello-world
+
+finish-args:
+  - --share=ipc
+  - --device=dri
+
+
+
+modules:
+  - name: dialog
+    buildsystem: autotools
+    sources:
+      - type: archive
+        url: https://invisible-island.net/datafiles/release/dialog.tar.gz
+        sha256: 6c6c5c7b1a6c33c1bb9a7c42f91b0f0a9fef4c2b1a4d2b1d9b4c4e4b9f8b6d7c
+
+  - name: hello-world
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 app/bin/hello-world /app/bin/hello-world
+      - install -Dm644 app/share/applications/com.example.HelloWorld.desktop /app/share/applications/com.example.HelloWorld.desktop
+    sources:
+      - type: dir
+        path: .

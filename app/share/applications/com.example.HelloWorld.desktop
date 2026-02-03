@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Hello World (Bash)
+Exec=hello-world
+Terminal=true
+Categories=Utility;

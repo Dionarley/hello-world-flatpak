@@ -1,0 +1,4 @@
+flatpak-builder --run \
+  build-dir \
+  flatpak/com.example.HelloWorld.yml \
+  hello-world

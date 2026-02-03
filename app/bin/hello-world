@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+IFS=$'\n\t'
+
+readonly TITLE="Hello World TUI"
+readonly MESSAGE="Hello World"
+
+has_dialog() {
+    command -v dialog >/dev/null 2>&1
+}
+
+tui_dialog() {
+    dialog \
+        --clear \
+        --title "${TITLE}" \
+        --msgbox "${MESSAGE}" 7 40
+}
+
+tui_ncurses() {
+    tput clear
+    tput civis
+
+    local rows cols
+    rows=$(tput lines)
+    cols=$(tput cols)
+
+    local r=$((rows / 2))
+    local c=$(((cols - ${#MESSAGE}) / 2))
+
+    tput cup "${r}" "${c}"
+    printf '%s' "${MESSAGE}"
+
+    tput cup $((r + 2)) $(((cols - 24) / 2))
+    printf '[ Pressione ENTER ]'
+
+    read -r _
+    tput cnorm
+    tput clear
+}
+
+main() {
+    if has_dialog; then
+        tui_dialog
+    else
+        tui_ncurses
+    fi
+}
+
+main "$@"
