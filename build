@@ -1,5 +1,0 @@
-flatpak-builder \
-  --force-clean \
-  --sandbox \
-  build-dir \
-  flatpak/com.example.HelloWorld.yml

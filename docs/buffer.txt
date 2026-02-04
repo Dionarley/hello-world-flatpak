@@ -1,0 +1,54 @@
+---------------------------------------------------------------------------
+
+hello-world-flatpak master  ? ❯ appstreamcli validate app/share/applications/metainfo/com.example.HelloWorld.metainfo.xml
+E: ~:~: xml-markup-invalid
+     Could not parse XML data: Entity: line 1: parser error : Document is empty
+
+---------------------------------------------------------------------------
+
+$ appstreamcli compose --no-partial-urls 
+--prefix=/ --origin=${FLATPAK_ID}
+ --media-baseurl=<repo-media-url>
+  --media-dir=${FLATPAK_DEST}/share/app-info/media 
+  --result-root=${FLATPAK_DEST} 
+  --data-dir=${FLATPAK_DEST}/share/app-info/xmls 
+  --icons-dir=${FLATPAK_DEST}/share/app-info/icons/flatpak 
+  --components=${FLATPAK_ID} ${FLATPAK_DEST}
+
+---------------------------------------------------------------------------
+prefix=/ 
+origin=${FLATPAK_ID}
+media-baseurl=<repo-media-url>
+media-dir=${FLATPAK_DEST}/share/app-info/media 
+result-root=${FLATPAK_DEST} 
+data-dir=${FLATPAK_DEST}/share/app-info/xmls 
+icons-dir=${FLATPAK_DEST}/share/app-info/icons/flatpak 
+components=${FLATPAK_ID} ${FLATPAK_DEST}
+
+---------------------------------------------------------------------------
+ local vars in dir::
+
+${FLATPAK_ID}
+
+${FLATPAK_DEST}/share/app-info/media 
+
+${FLATPAK_DEST}/share/app-info/xmls 
+
+${FLATPAK_DEST}/share/app-info/icons/flatpak 
+
+---------------------------------------------------------------------------
+FLATPAK_ID=
+FLATPAK_DEST=
+---------------------------------------------------------------------------
+
+> ./tmp/.log
+echo $FLATPAK_ID; echo $FLATPAK_DEST > ./tmp/.log
+echo $PWD >> ./tmp/.log
+echo $SHELL >> ./tmp/.log
+
+------
+flatpak docs::
+https://docs.flatpak.org/en/latest/conventions.html
+
+desktop::
+https://dbus.freedesktop.org/doc/dbus-specification.html#message-protocol-names

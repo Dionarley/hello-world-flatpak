@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="console-application">
+  <id>io.github.dionarley.hello_world_flatpak</id>
+  
+  <name>hello-world-flatpak</name>
+  <summary>prints hello world in terminal</summary>
+  
+  <metadata_license>MIT</metadata_license>
+  <project_license>MIT</project_license>
+  
+  <description>
+    <p>
+      repo app base for flatpak conventions
+    </p>
+  </description>
+  
+  <icon type="stock">hello-world-flatpak</icon>
+  
+  <categories>
+    <category>Development</category>
+    <category>Documentation</category>
+  </categories>
+  
+  <provides>
+    <binary>hello-world</binary>
+  </provides>
+</component>
+
+
+Install this file as as /usr/share/metainfo/io.github.dionarley.hello_world_flatpak.metainfo.xml
+
+You can validate this metadata locally by running:
+ appstreamcli validate io.github.dionarley.hello_world_flatpak.metainfo.xml
