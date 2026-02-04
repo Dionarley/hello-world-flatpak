@@ -1,4 +1,4 @@
-# Hello Worls Flatpak
+# Hello Word Flatpak
 Base flatpak requiments effort
 
 ### TODO
