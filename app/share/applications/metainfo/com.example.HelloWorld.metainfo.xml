@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>com.example.HelloWorld</id>
+
+  <name>Hello World</name>
+  <summary>Hello World TUI Application</summary>
+
+  <developer>
+    <name>Dionarley Ruas Vieira</name>
+  </developer>
+
+  <description>
+    <p>
+    Hello World is a minimal terminal-based application that demonstrates how to build,
+    package, and distribute a Bash-based TUI application using Flatpak and AppStream
+    best practices.
+    </p>
+    <p>
+    The application provides a simple menu-driven text interface and can be executed
+    both interactively or in headless mode, making it suitable as a reference project
+    for learning Flatpak packaging.
+    </p>
+  </description>
+
+  <url type="homepage">https://github.com/Dionarley/hello-world-flatpak</url>
+
+  <content_rating type="oars-1.1"/>
+
+  <launchable type="desktop-id">com.example.HelloWorld.desktop</launchable>
+
+  <metadata_license>MIT</metadata_license>
+  <project_license>MIT</project_license>
+
+</component>
