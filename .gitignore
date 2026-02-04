@@ -11,3 +11,7 @@ build-dir/
 
 # Bats
 .bats-runner.log
+
+ #vendor
+ vendor/
+ tmp/
